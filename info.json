@@ -1,0 +1,12 @@
+{
+  "commit": {
+    "commit": "f991a65919cfbcfbf060ad77176a9eb5c9938ec4",
+    "author": "Jeroen Ooms <jeroenooms@gmail.com>",
+    "time": "2021-05-04 15:26:13",
+    "files": 1,
+    "merge": false,
+    "message": "Do not ship readme to CRAN\n"
+  },
+  "remote": "https://github.com/ropensci/rzmq",
+  "pkg": "rzmq"
+}

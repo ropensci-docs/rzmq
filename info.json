@@ -1,0 +1,12 @@
+{
+  "commit": {
+    "commit": "354ebc8f2518c7001e027d79c6244e62724750c4",
+    "author": "Jeroen Ooms <jeroenooms@gmail.com>",
+    "time": "2023-12-04 12:52:10",
+    "files": 3,
+    "merge": false,
+    "message": "Fix a printf warning for CRAN\n"
+  },
+  "repo": "https://github.com/ropensci/rzmq",
+  "pkg": "rzmq"
+}

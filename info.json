@@ -1,0 +1,13 @@
+{
+  "commit": {
+    "commit": "da209735cacd31b7b5e7e5cbdcd1c96a9bf6f6f5",
+    "author": "Jeroen Ooms <jeroenooms@gmail.com>",
+    "time": "2026-03-21T15:01:43Z",
+    "files": 1,
+    "merge": false,
+    "message": "Actually R version is not required\n"
+  },
+  "repo": "https://github.com/ropensci/rzmq",
+  "pkg": "rzmq",
+  "time": "2026-08-30T07:29:57Z"
+}

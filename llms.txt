@@ -1,0 +1,160 @@
+# rzmq
+
+> R Bindings for ‘ZeroMQ’
+
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Package-License](http://img.shields.io/badge/license-GPL--3-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.md)
+[![CRAN](http://www.r-pkg.org/badges/version/rzmq)](https://cran.r-project.org/package=rzmq)
+[![Downloads](http://cranlogs.r-pkg.org/badges/rzmq?color=brightgreen)](http://www.r-pkg.org/pkg/rzmq)
+
+Interface to the ‘ZeroMQ’ lightweight messaging kernel (see
+<http://www.zeromq.org/> for more information).
+
+## Features
+
+rzmq is a message queue for serialized R objects. \* rzmq implements
+most the standard socket pairs that ZMQ offers. \* ZMQ devices are not
+implemented yet, nor is zmq_poll. \* Look for more features shortly.
+
+## Installation
+
+Binary packages for **OS-X** or **Windows** can be installed directly
+from CRAN:
+
+``` r
+
+install.packages("rzmq")
+```
+
+## Build from source
+
+Installation from source requires
+[`ZeroMQ`](http://zeromq.org/area:download). On **Debian** or **Ubuntu**
+use [libzmq3-dev](https://packages.debian.org/testing/libzmq3-dev):
+
+    sudo apt-get install -y libzmq3-dev
+
+On **Fedora** we need
+[zeromq-devel](https://apps.fedoraproject.org/packages/zeromq-devel):
+
+    sudo yum install zeromq-devel
+
+On **CentOS / RHEL** we install
+[zeromq3-devel](https://apps.fedoraproject.org/packages/zeromq3-devel)
+via EPEL:
+
+    sudo yum install epel-release
+    sudo yum install zeromq3-devel
+
+On **OS-X** use
+[zeromq](https://github.com/Homebrew/homebrew-core/blob/master/Formula/zeromq.rb)
+from Homebrew:
+
+    brew install zeromq
+
+## Usage
+
+A minimal example of remote execution.
+
+execute this R script on the remote server:
+
+``` r
+
+#!/usr/bin/env Rscript
+library(rzmq)
+context = init.context()
+socket = init.socket(context,"ZMQ_REP")
+bind.socket(socket,"tcp://*:5555")
+while(1) {
+    msg = receive.socket(socket);
+    fun <- msg$fun
+    args <- msg$args
+    print(args)
+    ans <- do.call(fun,args)
+    send.socket(socket,ans);
+}
+```
+
+and execute this bit locally:
+
+``` r
+
+library(rzmq)
+
+remote.exec <- function(socket,fun,...) {
+    send.socket(socket,data=list(fun=fun,args=list(...)))
+    receive.socket(socket)
+}
+
+substitute(expr)
+context = init.context()
+socket = init.socket(context,"ZMQ_REQ")
+connect.socket(socket,"tcp://localhost:5555")
+
+ans <- remote.exec(socket,sqrt,10000)
+```
+
+# Package index
+
+## All functions
+
+- [`bind.socket()`](https://docs.ropensci.org/rzmq/reference/bind.socket.md)
+  : Create an endpoint for accepting connections and bind it to the
+  socket referenced by the socket argument.
+- [`connect.socket()`](https://docs.ropensci.org/rzmq/reference/connect.socket.md)
+  [`disconnect.socket()`](https://docs.ropensci.org/rzmq/reference/connect.socket.md)
+  : Connect the socket referenced by the socket argument to the endpoint
+  specified by the endpoint argument.
+- [`init.context()`](https://docs.ropensci.org/rzmq/reference/init.context.md)
+  [`init.socket()`](https://docs.ropensci.org/rzmq/reference/init.context.md)
+  : initailize zmq context and zmq socket
+- [`init.message()`](https://docs.ropensci.org/rzmq/reference/init.message.md)
+  : create a message object.
+- [`poll.socket()`](https://docs.ropensci.org/rzmq/reference/poll.socket.md)
+  : Polls a list of sockets, waiting for the presence of a nonblocking
+  read, write, or error event.
+- [`receive.multipart()`](https://docs.ropensci.org/rzmq/reference/receive.multipart.md)
+  : Receive multipart ZMQ message
+- [`receive.socket()`](https://docs.ropensci.org/rzmq/reference/receive.socket.md)
+  [`receive.null.msg()`](https://docs.ropensci.org/rzmq/reference/receive.socket.md)
+  [`receive.string()`](https://docs.ropensci.org/rzmq/reference/receive.socket.md)
+  [`receive.int()`](https://docs.ropensci.org/rzmq/reference/receive.socket.md)
+  [`receive.double()`](https://docs.ropensci.org/rzmq/reference/receive.socket.md)
+  : Receive a message from the socket referenced by the socket argument.
+- [`send.multipart()`](https://docs.ropensci.org/rzmq/reference/send.multipart.md)
+  : Send multipart ZMQ message.
+- [`send.socket()`](https://docs.ropensci.org/rzmq/reference/send.socket.md)
+  [`send.null.msg()`](https://docs.ropensci.org/rzmq/reference/send.socket.md)
+  [`send.raw.string()`](https://docs.ropensci.org/rzmq/reference/send.socket.md)
+  : send a message.
+- [`set.hwm()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.swap()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.affinity()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.identity()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`subscribe()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`unsubscribe()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.rate()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.recovery.ivl()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.recovery.ivl.msec()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.mcast.loop()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.sndbuf()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.rcvbuf()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.linger()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.reconnect.ivl()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.zmq.backlog()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.reconnect.ivl.max()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`get.rcvmore()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`get.last.endpoint()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`get.send.timeout()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.send.timeout()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`get.rcv.timeout()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  [`set.rcv.timeout()`](https://docs.ropensci.org/rzmq/reference/socket.options.md)
+  : set a socket option.
+- [`zmq.errno()`](https://docs.ropensci.org/rzmq/reference/zmq.error.md)
+  [`zmq.strerror()`](https://docs.ropensci.org/rzmq/reference/zmq.error.md)
+  : get libzmq error numbers and error strings
+- [`zmq.version()`](https://docs.ropensci.org/rzmq/reference/zmq.version.md)
+  : get version of libzmq
+
